@@ -1,101 +1,109 @@
-import Image from "next/image";
+'use client'
+
+import { Quicksand, Raleway } from 'next/font/google'
+import Map from 'react-map-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import {useState} from "react";
+import Link from "next/link";
+
+// Load the Quicksand and Raleway fonts
+const quicksand = Quicksand({ subsets: ['latin'] });
+const raleway = Raleway({ subsets: ['latin'] });
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    // State for example data
+    const data = useState({
+        treeHealth: {
+            anomalies: 5,
+            lastUpdate: '2024-09-06',
+        },
+        nutrientLevels: {
+            nitrogen: 'Low',
+            phosphorus: 'Normal',
+            potassium: 'High',
+        },
+        pestCounts: {
+            aphids: 20,
+            mites: 15,
+            worms: 5,
+        },
+        productionEstimate: {
+            estimatedYield: '12,000 kg',
+            lastSurveyDate: '2024-09-01',
+        },
+    });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    return (
+        <div className="w-screen text-black h-screen bg-white flex flex-col items-start justify-start">
+            <div
+                className={`px-6 text-4xl w-full h-16 flex flex-row items-center font-bold ${quicksand.className} border-b border-b-neutral-300`}>
+                <p className={'w-[600px] h-fit'}>Cryomalus Dashboard</p>
+                <div className={`h-full items-center flex w-full text-lg space-x-8 ${raleway.className}`}>
+                    <Link href={'/'}
+                          className={'text-md text-neutral-600 hover:underline'}>Home</Link>
+                    <Link href={'/anomalies'}
+                          className={'text-md text-neutral-600 hover:underline'}>Anomalies</Link>
+                </div>
+            </div>
+            <div className="flex flex-row h-full w-screen items-center">
+                <div className="w-[60%] h-[600px] flex flex-row p-6">
+                    <Map
+                        mapboxAccessToken="pk.eyJ1IjoicmFjaGl0a3VtYXIyMDUiLCJhIjoiY2xyb28yd2I3MDIxazJrbnpocjN4YTkzcCJ9.nP43qrue0MVVQim3guk0oQ"
+                        initialViewState={{
+                            latitude: 31.15910322273199,
+                            longitude: 77.38675496156976,
+                            zoom: 16,
+                        }}
+                        mapStyle={'mapbox://styles/mapbox/satellite-v9'}
+                        style={{borderRadius: '10px'}}
+                    />
+                </div>
+                <div className="w-[40%] p-6">
+                    <div className="border p-5 rounded-xl border-neutral-400">
+                        <p className={`text-3xl mb-4 ${quicksand.className} font-semibold`}>Dashboard Overview</p>
+                        <table className="w-full table-auto border-collapse border border-neutral-300">
+                            <thead>
+                            <tr>
+                                <th className="border border-neutral-300 px-4 py-2 text-left">Category</th>
+                                <th className="border border-neutral-300 px-4 py-2 text-left">Metric</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td className="border border-neutral-300 px-4 py-2 font-medium">Tree Health</td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                    <p><span className="font-medium">Anomalies Detected:</span> {data.treeHealth.anomalies}</p>
+                                    <p><span className="font-medium">Last Update:</span> {data.treeHealth.lastUpdate}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-neutral-300 px-4 py-2 font-medium">Nutrient Levels</td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                    <p><span className="font-medium">Nitrogen:</span> {data.nutrientLevels.nitrogen}</p>
+                                    <p><span className="font-medium">Phosphorus:</span> {data.nutrientLevels.phosphorus}</p>
+                                    <p><span className="font-medium">Potassium:</span> {data.nutrientLevels.potassium}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-neutral-300 px-4 py-2 font-medium">Pest Counts</td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                    <p><span className="font-medium">Aphids:</span> {data.pestCounts.aphids}</p>
+                                    <p><span className="font-medium">Mites:</span> {data.pestCounts.mites}</p>
+                                    <p><span className="font-medium">Worms:</span> {data.pestCounts.worms}</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="border border-neutral-300 px-4 py-2 font-medium">Production Estimate</td>
+                                <td className="border border-neutral-300 px-4 py-2">
+                                    <p><span className="font-medium">Estimated Yield:</span> {data.productionEstimate.estimatedYield}</p>
+                                    <p><span className="font-medium">Last Survey Date:</span> {data.productionEstimate.lastSurveyDate}</p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }
