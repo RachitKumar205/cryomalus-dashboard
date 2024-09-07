@@ -12,7 +12,7 @@ const raleway = Raleway({ subsets: ['latin'] });
 
 export default function Home() {
     // State for example data
-    const data = useState({
+    const [data, setData] = useState({
         treeHealth: {
             anomalies: 5,
             lastUpdate: '2024-09-06',

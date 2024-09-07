@@ -37,7 +37,7 @@ function getMostRecentTimeSlot() {
 }
 
 export default function Home() {
-    const data = useState({
+    const [data, setData] = useState({
         treeHealth: {
             anomalies: 5,
             lastUpdate: '2024-09-06',
